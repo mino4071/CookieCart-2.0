@@ -1,0 +1,36 @@
+-module (web_index).
+-compile (export_all).
+
+-include_lib ("nitrogen/include/wf.inc").
+-include("records.hrl").
+
+main() -> 
+    PathInfo = wf:get_path_info(),
+    select_template(PathInfo).
+
+select_template([]) ->
+    #template { file="./tpl/main.tpl"};
+select_template(PathInfo) ->
+    Tokens = string:tokens(PathInfo,"_"),
+    try [list_to_integer(X)||X<-Tokens] of
+	[CatId,ProdId] ->
+	    product:load(#prodId{category=CatId,product=ProdId});
+	[CatId] ->
+	    category:load(CatId)
+    catch
+	_Error ->
+	    #template { file="./wwwroot/"++ PathInfo}
+    end.
+
+render() ->
+    wf:render(#label { text="2010-03-04 : Code Work is rolling and soon you will be able to start using this wonderful page. /admin" }).
+render_page(String) ->
+    String.
+
+template() ->
+    %% Hacka-dodel-doo
+    wf:state(template_was_called,false),
+    #template { file="./wwwroot/contact.tpl"}.
+
+event(Event) ->
+    ?PRINT(Event).

@@ -1,0 +1,28 @@
+
+-record(category,
+	{id,
+	 name}).
+
+-record(product,
+	{id,
+	 name,
+	 url,
+	 img,
+	 price,
+	 description}).
+
+-record(price,
+	{price,
+	 currency}).
+
+-record(prodId,
+	{product,
+	 category}).
+
+-record(cart,
+	{products,
+	 sum}).
+
+-record(cartItem,
+	{prodId,
+	 quantity}).

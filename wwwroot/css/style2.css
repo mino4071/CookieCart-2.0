@@ -1,0 +1,309 @@
+/*******************************************************************************
+Title:  Cookie Cart - Default theme
+Author: Christian Rennerskog
+Doc:    The style sheet for the default theme
+*******************************************************************************/
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background: #999;
+    color: #000;
+    font-size: 12px;
+    font-family: Arial, Tahoma, Verdana;
+}
+h1 a, h1 a:visited, h1 a:hover {
+    text-decoration: none;
+    font-weight: normal;
+    color: #000;
+}
+a, a:visited {
+    text-decoration: none;
+    color: #555599;
+}
+a:hover {
+    text-decoration: underline;
+    color: #5555ff;
+}
+label {
+    color: #6f6f6f;
+    font-size: 10px;
+    font-weight: bold;
+    padding-bottom: 1px;
+}
+h4 {
+    color: #fff;
+    font-size: 14px;
+    margin: 5px 0 5px 0;
+}
+/*******************************************************************************
+Structure
+*******************************************************************************/
+#wrap {
+    width:910px;
+    margin-left:auto;
+    margin-right:auto;
+}
+#container {
+    background: url(../img/bg-row.png) repeat-y;
+    padding: 0 5px 0 5px;
+    display: block;
+}
+#end {
+    background: url(../img/bg-end.png) no-repeat top;
+    width: 910px;
+    height: 15px;
+}
+#content {
+    width: 690px;
+    float: right;
+    margin: 10px 10px 10px 0;
+}
+#top-panel {
+    border-top: 3px solid #ff9c00;
+    margin: 0 10px 0 10px;
+    height: 25px;
+    padding-top: 3px;
+}
+#top-panel a, top-panel a:visited {
+    background: url(../img/arrow.png) no-repeat center top; 
+    color: #000;
+    padding-top: 3px;
+    margin-right: 15px;
+}
+#loginpanel {
+    margin: 0 0 0 10px;
+    background: url(../img/panel-white.png) repeat-x;
+    height: 30px;
+    width: 170px;
+    float: left;
+    padding: 10px 0 0 10px;
+}
+
+#loginpanel ul li {
+    padding-left: 19px;
+    text-decoration: none;
+    margin: 0 3px;
+    display: inline-block;
+    color: #000000;
+}
+
+
+#toolbarpanel {
+    margin: 0 10px 0 0;
+    background: url(../img/panel-white.png) repeat-x;
+    height: 28px;
+    width: 690px;
+    float: right;
+    padding: 12px 0 0 10px; 
+}
+#toolbarpanel ul li {
+    display: inline;
+    color:
+    line-height: 20px;
+}
+#toolbarpanel ul li a {
+    padding-left: 19px;
+    text-decoration: none;
+    margin: 0 3px;
+    display: inline-block;
+    color: #000000;
+}
+
+#header { margin: 0 10px 10px 10px; }
+#credits {
+    color: #afafaf;
+    text-align: center;
+    font-size: 10px;
+}
+#credits a, #credits a:visited { color: #7777ff; }
+/*******************************************************************************
+Content
+*******************************************************************************/
+#content h2 {
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+#content h3 {
+    color: #7f7f7f;
+    font-size: 10px;
+    border-bottom: 1px solid #afafaf;
+    margin-bottom: 10px;
+    padding-top: 10px;
+}
+/*******************************************************************************
+Sidebar
+*******************************************************************************/
+#sidebar {
+    width: 180px;
+    float: left;
+    margin: 0 0 0 10px;
+}
+#sidebar .block {
+    width: 160px;
+    padding: 10px;
+    background: #d8d9d7;
+    margin-bottom: 
+    color: #000000;
+}
+#sidebar .block a { color: #000000; }
+#sidebar ul {
+    list-style: square;
+    line-height: 17px;
+    color: #;
+    padding-left: 15px;
+}
+#sidebar ul li a, #sidebar ul li a:visited {
+    margin: 0 5px;
+    text-decoration: none;
+    display: block;
+    color: #000000;
+}
+#sidebar ul li a:hover { text-decoration: underline; color: #9f9f9f;}
+#sidebar ul li ul {    margin-left: 10px; color: #000000;}
+#sidebar h3 {
+    background: #9f9f9f;
+    padding: 3px 5px 3px 5px;
+    color: #fff;
+    width: 150px;
+    border-bottom: 2px solid #000;
+    margin-bottom: 10px;
+}
+/*******************************************************************************
+Other
+*******************************************************************************/
+.text-right{ text-align: right; }
+.text-left{ text-align: left; }
+.text-center{ text-align: center; }
+.right { float: right; }
+.left { float: left; }
+.clear { clear: both; }
+.column {
+    float: left;
+    padding-right: 10px;
+}
+/*******************************************************************************
+Tables
+*******************************************************************************/
+table {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+}
+td, th {
+    padding: 0px 20px 2px 2px;
+    text-align: left;
+    height: 22px;
+    vertical-align: top;
+    white-space: nowrap;
+}
+.fullwidth {
+    width: 100%;
+    white-space: normal;
+}
+th {
+    background: #fff;
+    border-bottom: 2px solid #cfcfcf;
+    color: #555599;
+    line-height: 20px;
+}
+/*******************************************************************************
+Forms
+*******************************************************************************/
+input {
+    min-width: 100px;
+}
+input.small_textbox { 
+    min-width: 40px;
+    width: 40px;
+}
+input.profile {
+    min-width: 135px;
+    width: 135px;
+    height: 15px;
+    border: 1px solid #aaa;
+    color: #333;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    font-size: 13px;
+}
+input.searchfield {
+    min-width: 135px;
+    width: 135px;
+    border: 1px solid #fff;
+    background: #297294;
+    color: #fff;
+}
+textarea {
+    width: 340px;
+    height: 200px;
+    padding: 5px;
+    overflow: auto;
+}
+
+/*******************************************************************************
+Icons
+*******************************************************************************/
+.icon {
+    padding-left: 19px;
+    text-decoration: none;
+    height: 20px;
+    font-size: 12px;
+    margin: 0 3px;
+    display: inline-block;
+    line-height: 20px;
+}
+.sorticon {
+    padding-right: 19px;
+    text-decoration: none;
+    height: 20px;
+    font-size: 12px;
+    margin: 0 3px;
+    display: inline-block;
+    line-height: 20px;
+}
+/* Navigation bar */
+.chat_new { background:transparent url(../img/icons/user_comment.png) no-repeat left; }
+
+.logout { background:transparent url(../img/icons/door_out.png) no-repeat left; }
+.login { background:transparent url(../img/icons/door_in.png) no-repeat left; }
+.profile { background:transparent url(../img/icons/user.png) no-repeat left; }
+.pm { background:transparent url(../img/icons/email_open.png) no-repeat left; }
+.project { background:transparent url(../img/icons/folder_add.png) no-repeat left; }
+
+.add { background:transparent url(../img/icons/add.png) no-repeat left; }
+.delete { background:transparent url(../img/icons/delete.png) no-repeat left; }
+.search { background:transparent url(../img/icons/magnifier.png) no-repeat left; }
+.view { background:transparent url(../img/icons/eye.png) no-repeat left; }
+
+.cart { background:transparent url(../img/icons/cart.png) no-repeat left; }
+.cart_add { background:transparent url(../img/icons/cart_add.png) no-repeat left; }
+.cart_delete { background:transparent url(../img/icons/cart_delete.png) no-repeat left; }
+.cart_edit { background:transparent url(../img/icons/cart_edit.png) no-repeat left; }
+.cart_put { background:transparent url(../img/icons/cart_put.png) no-repeat left; }
+.cart_remove { background:transparent url(../img/icons/cart_remove.png) no-repeat left; }
+.cart_go { background:transparent url(../img/icons/cart_go.png) no-repeat left; }
+
+.order { background:transparent url(../img/icons/package.png) no-repeat left; }
+.order_add { background:transparent url(../img/icons/package_add.png) no-repeat left; }
+.order_delete { background:transparent url(../img/icons/package_delete.png) no-repeat left; }
+.order_go { background:transparent url(../img/icons/package_go.png) no-repeat left; }
+.order_update { background:transparent url(../img/icons/package_green.png) no-repeat left; }
+
+.arrow_up { background:transparent url(../img/icons/bullet_arrow_up.png) no-repeat right; }
+.arrow_down { background:transparent url(../img/icons/bullet_arrow_down.png) no-repeat right; }
+/*******************************************************************************
+Nitrogen
+*******************************************************************************/
+.flash_container {}
+.flash {
+    color: #000;
+    background-color: #f6fc93;
+    border: #bcc264 solid 2px; 
+    padding: 3px 5px 3px 5px; 
+    margin-bottom: 7px;
+}
+.flash .flash_content {    margin-right: 50px; }
+.flash .flash_close_button { float: right; }
