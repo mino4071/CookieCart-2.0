@@ -27,6 +27,7 @@ stop(_) -> nitrogen:stop().
 %%
 %% route("/web/newroute/" ++ PathInfo) -> {web_index, PathInfo};
 
+route(Path=("/web/admin/"++_)) -> nitrogen:route(Path);
 route("/web/" ++ PathInfo) -> {web_index,PathInfo};
 route(Path) -> nitrogen:route(Path).
 

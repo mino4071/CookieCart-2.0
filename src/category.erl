@@ -1,3 +1,10 @@
+%%%-------------------------------------------------------------------
+%%% File    : category.erl
+%%% Author  :  <Mino@X60S>
+%%% Description : 
+%%%
+%%% Created : 29 Apr 2010 by  <Mino@X60S>
+%%%-------------------------------------------------------------------
 -module (category).
 -compile (export_all).
 
@@ -6,18 +13,15 @@
 
 -define(CATEGORY,wf:state(category)).
 
+%%====================================================================
+%% API Functions
+%%====================================================================
 load(CatId) ->
-    wf:state(category,db:get_category(CatId)),
-    
-    IdStr = integer_to_list(CatId),
-    Path = "./tpl/" ++ IdStr ++ ".tpl",
-    case file:read_file_info(Path) of
-	{ok,_} ->
-	    #template { file=Path };
-	{error,_} ->
-	    #template{ file="./tpl/CC_category.tpl" }
-    end.
+    wf:state(category,db:get_category(CatId)).
 
+%%====================================================================
+%% Template Functions
+%%====================================================================
 %%%%%% Default %%%%%%
 
 list()->
@@ -61,7 +65,9 @@ listProducts(Template) ->
     
     [Render(X)||X<-Data].
 
-%%%%%% Field Access Functions %%%%%%
+%%--------------------------------------------------------------------
+%% Field Access Functions 
+%%--------------------------------------------------------------------
 
 name() ->
     (?CATEGORY)#category.name.

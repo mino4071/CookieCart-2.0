@@ -1,3 +1,10 @@
+%%%-------------------------------------------------------------------
+%%% File    : product.erl
+%%% Author  :  <Mino@X60S>
+%%% Description : 
+%%%
+%%% Created : 29 Apr 2010 by  <Mino@X60S>
+%%%-------------------------------------------------------------------
 -module (product).
 -compile (export_all).
 
@@ -6,22 +13,18 @@
 
 -define(PRODUCT,wf:state(product)).
 
-%load(Product) ->
-    
+%%====================================================================
+%% API Functions
+%%====================================================================
 load(Product) when is_record(Product,product)->
     wf:state(product,Product);
 load(ProdId) ->
-    wf:state(product,db:get_product(ProdId)),
+    wf:state(product,db:get_product(ProdId)).
     
-    ProdStr = integer_to_list(ProdId),
-    Path = "./tpl/112" ++ ProdStr ++ ".tpl",
-    case file:read_file_info(Path) of
-	{ok,_} ->
-	    #template { file=Path };
-	{error,_} ->
-	    #template{ file="./tpl/CC_product.tpl" }
-    end.
-    
+        
+%%====================================================================
+%% Template Functions
+%%====================================================================
 id() ->
     (?PRODUCT)#product.id.
 
