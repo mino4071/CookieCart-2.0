@@ -13,6 +13,11 @@
 
 -include("records.hrl").
 
+reset() ->
+	mnesia:stop(),
+	mnesia:delete_schema([node()]),
+        start().
+
 start()->
     io:format("~n*******************~n" ++
 	      "  Starting mnesia~n" ++
