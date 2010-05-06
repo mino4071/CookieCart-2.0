@@ -16,17 +16,16 @@
 %%====================================================================
 main() -> 
     PathInfo = wf:get_path_info(),
-    case PathInfo of
-	[] ->
-	    #template { file=env(tpl_main)};
-	"112" ++ ProdId ->
-	    product:load(list_to_integer(ProdId)),
-	    tpl(PathInfo,tpl_product);
-	"99" ++ CatId ->
-	    category:load(list_to_integer(CatId)),
-	    tpl(PathInfo,tpl_category);
-	_ ->
-	    #template { file="./wwwroot/"++ PathInfo}
+    {Path,Info} = path_info(PathInfo),
+    wf:state(pathInfo,Info),
+    
+    File = "./wwwroot/"++Path++".html",
+    case file:read_file_info(File) of
+	{ok,_} ->
+	    #template { file=File };
+	{error,_} ->
+	    ?PRINT(PathInfo),
+	    #template{ file=env(error) }
     end.
 
 event(Event) ->
@@ -36,18 +35,19 @@ event(Event) ->
 %%====================================================================
 %% Internal Functions
 %%====================================================================
+path_info(Str) ->
+    {Path,Info} = path_info(lists:reverse(Str),[]),
+    {lists:reverse(Path),Info}.
+path_info([],Acc) ->
+    {"xedni",Acc};
+path_info([$/|Tail],Acc) ->
+    {Tail,Acc};
+path_info([Head|Tail],Acc) ->
+    path_info(Tail,[Head|Acc]).
+
 env(Par) ->
     {ok,Val} = application:get_env(Par),
     Val.
-
-tpl(IdStr,Default) ->
-    Path = "./tpl/" ++ IdStr ++ ".tpl",
-    case file:read_file_info(Path) of
-	{ok,_} ->
-	    #template { file=Path };
-	{error,_} ->
-	    #template{ file=env(Default) }
-    end.
 
 
 %%====================================================================

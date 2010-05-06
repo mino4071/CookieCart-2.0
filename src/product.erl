@@ -20,11 +20,22 @@ load(Product) when is_record(Product,product)->
     wf:state(product,Product);
 load(ProdId) ->
     wf:state(product,db:get_product(ProdId)).
-    
-        
+
+load() ->
+    ?PRINT(wf:state(pathInfo)),
+    case wf:state(pathInfo) of
+	"112"++ProdId ->
+	    load(list_to_integer(ProdId)),
+	    true;
+	_ -> false
+    end.    
 %%====================================================================
 %% Template Functions
 %%====================================================================
+loadFromPath() ->
+    load(),
+    [].
+
 id() ->
     (?PRODUCT)#product.id.
 

@@ -53,16 +53,15 @@ eval(emptyCart) ->
 	_ -> false
     end;
 eval(product) ->
-    case wf:state(product) of
-	undefined ->
-	    false;
-	_ -> true
-    end;
+    product:load();
 eval(category) ->
-    case wf:state(category) of
-	undefined ->
-	    false;
-	_ -> true
+    category:is_category();
+
+eval(Page) when is_list(Page) ->
+    case wf:get_path_info() of
+	Page ->
+	    true;
+	_ -> false
     end;
 eval(_Con) ->
-    true.
+    false.

@@ -12,6 +12,7 @@
 	 %% CookieCart Env
 	 {tpl_main, "./tpl/CC_main.tpl"},
 	 {tpl_category, "./tpl/CC_main.tpl"},
-	 {tpl_product, "./tpl/CC_main.tpl"}
+	 {tpl_product, "./tpl/CC_main.tpl"},
+	 {tpl_cart, "./tpl/CC_main.tpl"}
 	]}
  ]}.

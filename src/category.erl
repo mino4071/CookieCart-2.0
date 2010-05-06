@@ -19,9 +19,21 @@
 load(CatId) ->
     wf:state(category,db:get_category(CatId)).
 
+load() ->
+    ?PRINT(wf:state(pathInfo)),
+    case wf:state(pathInfo) of
+	"99"++CatId ->
+	    load(list_to_integer(CatId)),
+	    true;
+	_ -> false
+    end.
 %%====================================================================
 %% Template Functions
 %%====================================================================
+loadFromPath() ->
+    load(),
+    [].
+
 %%%%%% Default %%%%%%
 
 list()->
