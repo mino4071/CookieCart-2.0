@@ -14,9 +14,10 @@
 -include("records.hrl").
 
 reset() ->
-	mnesia:stop(),
-	mnesia:delete_schema([node()]),
-        start().
+    mnesia:stop(),
+    mnesia:delete_schema([node()]),
+    start(),
+    init().
 
 start()->
     io:format("~n*******************~n" ++
@@ -41,13 +42,16 @@ init() ->
     
     add_product(#product{name="Choco Cookie", cat_id = 1,
 			 description="Some very tasty cookies!",
-			 price=#price{price=1000,currency="SEK"}}),
+			 price=1000,
+			 quantity=5}),
     add_product(#product{name="Wedding Cake", cat_id = 2,
 			 description="Some very tasty cookies!",
-			 price=#price{price=1000,currency="SEK"}}),
+			 price=1000,
+			 quantity=10}),
     add_product(#product{name="Meat Pie", cat_id = 3,
 			 description="Some very tasty cookies!",
-			 price=#price{price=1000,currency="SEK"}}).
+			 price=1000,
+			 quantity=15}).
 
 
 %%====================================================================
@@ -105,12 +109,19 @@ get_product(ProdId) ->
 	  end,
     call(Fun).
 
-
-get_products(ProdIdList) when is_list(ProdIdList) ->
+get_products([]) -> [];
+get_products(ProdIdList=[Head|_]) when is_integer(Head) ->
     Fun = fun() ->
 		  [hd(mnesia:read(product,X))||X<-ProdIdList]
 	  end,
-    call(Fun);    
+    call(Fun);
+get_products(CartItemList=[Head|_]) when is_record(Head,cartItem) ->
+    Fun = fun() ->
+		  [{X#cartItem.quantity,
+		    hd(mnesia:read(product,X#cartItem.prodId))}
+		   ||X<-CartItemList]
+	  end,
+    call(Fun);
 get_products(CatId) when is_integer(CatId) ->
     Fun = fun() ->
 		  R = #product{ cat_id = CatId, _ = '_'},

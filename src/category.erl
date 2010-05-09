@@ -20,7 +20,6 @@ load(CatId) ->
     wf:state(category,db:get_category(CatId)).
 
 load() ->
-    ?PRINT(wf:state(pathInfo)),
     case wf:state(pathInfo) of
 	"99"++CatId ->
 	    load(list_to_integer(CatId)),
@@ -45,7 +44,6 @@ list()->
 
 listProducts() ->
     Data = db:get_products((?CATEGORY)#category.id),
-    wf:state(product_cache,Data),
     Map = #product{name=name@text, url=name@url},
     Body = [ #link{id=name},
 	     #br{}],
@@ -67,10 +65,9 @@ list(Template) ->
 listProducts(Template) ->
     File = "./wwwroot/" ++ Template,
     Data = db:get_products((?CATEGORY)#category.id),
-    wf:state(prod_cache,Data),
-
+    
     Render = fun(Product) ->
-		     product:load(Product),
+		     product:load(Product#product{quantity="1"}),
 		     wf:state(template_was_called,false),
 		     wf:render(#template{ file=File })
 	     end,

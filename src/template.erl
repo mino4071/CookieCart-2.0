@@ -38,12 +38,13 @@ conditional(Con,True,False) ->
 %% Internal functions
 %%====================================================================
 action(Str) ->
-    case file:read_file_info(Str) of
+    File = "./wwwroot/"++Str,
+    case file:read_file_info(File) of
 	{ok,_} ->
 	    wf:state(template_was_called,false),
-	    #template { file=Str };
+	    #template { file=File };
 	{error,_} ->
-	    Str
+	    "File not Found: "++File
     end.
 
 eval(emptyCart) ->
@@ -55,7 +56,7 @@ eval(emptyCart) ->
 eval(product) ->
     product:load();
 eval(category) ->
-    category:is_category();
+    category:load();
 
 eval(Page) when is_list(Page) ->
     case wf:get_path_info() of

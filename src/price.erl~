@@ -1,5 +1,0 @@
--module(price).
-
--include("records.hrl").
-
-toString(Price)

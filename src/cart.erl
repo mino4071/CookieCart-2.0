@@ -11,8 +11,10 @@
 -include_lib ("nitrogen/include/wf.inc").
 -include("records.hrl").
 
+-define(i2l(Integer),integer_to_list(Integer)).
+
 %%====================================================================
-%% API Functions
+%% Template Functions
 %%====================================================================
 list()->
     Cart = get_cart(),
@@ -25,11 +27,45 @@ list()->
     #panel{id=cart_content, body = 
 	   [#bind{ data = Data, map = Map, body = Body}]}.
 
+list(Template) ->
+    File = "./wwwroot/" ++ Template,
+    Cart = get_cart(),
+    CartItemList = Cart#cart.products,
+    Data = db:get_products(CartItemList),
+   
+    Render = fun({Quantity,Product}) ->
+		     product:load(Product#product{quantity=Quantity}),
+		     wf:state(template_was_called,false),
+		     wf:render(#template{ file=File })
+	     end,
+    
+    [Render(X)||X<-Data].
+
+quantityTextbox() ->
+    quantityTextbox("").
+quantityTextbox(Class) ->
+    #textbox{class=Class, text=?i2l(product:quantity())}.
+
+rowTotal() ->
+    price:toString(product:quantity() * product:raw_price()).
+
+totalPrice() ->
+    Cart = get_cart(),
+    CartItemList = Cart#cart.products,
+    Data = db:get_products(CartItemList),
+    price:toString(sum_cart(Data)).
+
+deleteLink() ->
+    Delegate = #event{type=click, delegate=cart, 
+		      postback={delete,product:id()}},
+    #link{text="delete", actions=Delegate}.
+
 %%====================================================================
 %% External Functions
 %%====================================================================
-add(Quantity, ProdId) ->
+add(Quantity, Product) ->
     Cart = get_cart(),
+    ProdId = product:get_Id(Product),
     Prods = cc_add(#cartItem{prodId=ProdId,quantity=Quantity},
 		   Cart#cart.products, []),
     set_cart(Cart#cart{products=Prods}),
@@ -49,7 +85,6 @@ set_cart(Cart) ->
     end.
 
 get_cart() ->
-    ?PRINT(wf:session(cart)),
     case wf:session(cart) of
 	undefined ->
 	    Cart = case cookie of %%check user logged in
@@ -85,3 +120,18 @@ cc_add(Item,[HD|TL],Acc) ->
 	false ->
 	    cc_add(Item,TL,[HD|Acc])
     end.
+
+sum_cart([]) ->
+    0;
+sum_cart([{Quantity,Product}|Tail]) ->
+    (Quantity * product:get_price(Product)) + sum_cart(Tail).
+
+event({delete,ProdId}) ->
+    Cart = get_cart(),
+    Products = [X||X<-Cart#cart.products,X#cartItem.prodId /= ProdId],
+    
+    set_cart(Cart#cart{products=Products}),
+    wf:redirect("").
+
+    
+    

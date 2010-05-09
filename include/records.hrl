@@ -14,6 +14,7 @@
 	 cat_id,
 	 img,
 	 price,
+	 quantity,
 	 description}).
 
 -record(price,
@@ -26,7 +27,7 @@
 
 -record(cart,
 	{products,
-	 sum}).
+	 totalPrice}).
 
 -record(cartItem,
 	{prodId,

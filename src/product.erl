@@ -10,6 +10,7 @@
 
 -include_lib ("nitrogen/include/wf.inc").
 -include("records.hrl").
+-include("utils.hrl").
 
 -define(PRODUCT,wf:state(product)).
 
@@ -19,16 +20,25 @@
 load(Product) when is_record(Product,product)->
     wf:state(product,Product);
 load(ProdId) ->
-    wf:state(product,db:get_product(ProdId)).
+    wf:state(product,(db:get_product(ProdId))#product{quantity="1"}).
 
 load() ->
-    ?PRINT(wf:state(pathInfo)),
     case wf:state(pathInfo) of
 	"112"++ProdId ->
 	    load(list_to_integer(ProdId)),
 	    true;
 	_ -> false
-    end.    
+    end.
+
+raw_price() ->
+        (?PRODUCT)#product.price.
+
+get_Id(Product) ->
+    Product#product.id.
+
+get_price(Product) ->
+    Product#product.price.
+
 %%====================================================================
 %% Template Functions
 %%====================================================================
@@ -55,10 +65,22 @@ price() ->
     price:toString((?PRODUCT)#product.price).
 
 buyLink() ->
-    Delegate = #event{type=click, delegate=product, postback={buy,id(),1}},
+    Delegate = #event{type=click, delegate=product, postback={buy,?PRODUCT}},
     #link{text="add to cart", class="icon cart_put", actions=Delegate}.
 
-event({buy,ProdId,Qty}) ->
-    cart:add(Qty,ProdId);
+quantity() ->
+    (?PRODUCT)#product.quantity.
+
+quantityTextbox(Class) ->
+    #textbox{id="Qty" ++ ?i2l(id()),
+	     class=Class, 
+	     text=(?PRODUCT)#product.quantity}.
+
+event({buy,Product}) ->
+    Qty = case wf:q("Qty"++ ?i2l(get_Id(Product))) of
+	      [] -> 1;
+	      Quantity -> ?l2i(hd(Quantity))
+	  end,
+    cart:add(Qty,Product);
 event(Event) ->
     ?PRINT(Event).

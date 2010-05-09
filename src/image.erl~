@@ -1,4 +1,0 @@
--module(image).
-
-load(ImgID) ->
-    "./img/default.gif/".

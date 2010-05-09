@@ -1,1 +1,17 @@
-<h1>HEJ!!</h1>
+<h2>Cart</h2>
+<table>
+  <tr>
+    <th>Quantity</th>
+    <th class="fullwidth">Product</th>
+    <th>Item price</th>
+    <th>Row total</th>
+    <th>Update</th>
+    <th>Remove</th>
+  </tr>
+  [[[cart:list("cartItem.html")]]]
+  <tr>
+    <td class="text-right" colspan="3"><b>Subtotal</b></td>
+    <td>[[[cart:totalPrice()]]]</td>
+    <td colspan="2"></td>
+  </tr>
+</table>
