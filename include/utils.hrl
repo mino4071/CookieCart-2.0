@@ -1,0 +1,2 @@
+-define(i2l(Integer),integer_to_list(Integer)).
+-define(l2i(List),list_to_integer(List)).
