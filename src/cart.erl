@@ -10,8 +10,8 @@
 
 -include_lib ("nitrogen/include/wf.inc").
 -include("records.hrl").
+-include("utils.hrl").
 
--define(i2l(Integer),integer_to_list(Integer)).
 
 %%====================================================================
 %% Template Functions
@@ -44,7 +44,9 @@ list(Template) ->
 quantityTextbox() ->
     quantityTextbox("").
 quantityTextbox(Class) ->
-    #textbox{class=Class, text=?i2l(product:quantity())}.
+    #textbox{class=Class, 
+	     id="Qty"++?i2l(product:id()),
+	     text=?i2l(product:quantity())}.
 
 rowTotal() ->
     price:toString(product:quantity() * product:raw_price()).
@@ -59,6 +61,11 @@ deleteLink() ->
     Delegate = #event{type=click, delegate=cart, 
 		      postback={delete,product:id()}},
     #link{text="delete", actions=Delegate}.
+
+updateLink() ->
+    Delegate = #event{type=click, delegate=cart, 
+		      postback={update,product:id()}},
+    #link{text="update", actions=Delegate}.
 
 %%====================================================================
 %% External Functions
@@ -131,7 +138,20 @@ event({delete,ProdId}) ->
     Products = [X||X<-Cart#cart.products,X#cartItem.prodId /= ProdId],
     
     set_cart(Cart#cart{products=Products}),
+    wf:redirect("");
+event({update,ProdId}) ->
+    Cart = get_cart(),
+    Qty = ?l2i(hd(wf:q("Qty"++?i2l(ProdId)))),
+    Update = fun(Item) ->
+		     case Item#cartItem.prodId == ProdId of
+			 true ->
+			     Item#cartItem{quantity=Qty};
+			 false ->
+			     Item
+		     end
+	     end,
+    Products = [Update(X)||X<-Cart#cart.products],
+    set_cart(Cart#cart{products=Products}),
     wf:redirect("").
-
     
     
