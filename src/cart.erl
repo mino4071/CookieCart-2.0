@@ -12,6 +12,66 @@
 -include("records.hrl").
 -include("utils.hrl").
 
+%%====================================================================
+%% API Functions
+%%====================================================================
+add(Quantity, Product) ->
+    Cart = get_cart(),
+    ProdId = product:get_Id(Product),
+    Prods = cc_add(#cartItem{prodId=ProdId,quantity=Quantity},
+		   Cart#cart.products, []),
+    set_cart(Cart#cart{products=Prods}),
+    wf:update(cart_content,list()).
+
+%%====================================================================
+%% Internal Functions
+%%====================================================================
+set_cart(Cart) ->
+    wf:session(cart,Cart),
+    wf:set_cookie(cart,wf:pickle(Cart)),
+    case true of %%Check if user is logged in
+	true ->
+	    []; %%add cart to db
+	_ ->
+	    []
+    end.
+
+get_cart() ->
+    case true of %%check user logged in
+	false ->
+	    cookie_cart();
+	true ->
+	    db_cart()
+    end.
+
+cookie_cart() ->
+    case wf:get_cookie(cart) of
+	undefined ->
+	    #cart{products=[]};
+	Cart ->
+	    wf:depickle(Cart)
+    end.
+
+db_cart() ->
+    #cart{products=[]}.
+
+
+cc_add(Item,[],Acc) ->
+    [Item|lists:reverse(Acc)];
+cc_add(Item,[HD|TL],Acc) ->
+    case Item#cartItem.prodId == HD#cartItem.prodId of
+	true ->
+	    NewQty = Item#cartItem.quantity + HD#cartItem.quantity,
+	    lists:reverse(Acc,[HD#cartItem{quantity=NewQty}|TL]);
+	false ->
+	    cc_add(Item,TL,[HD|Acc])
+    end.
+
+
+sum_cart([]) ->
+    0;
+sum_cart([{Quantity,Product}|Tail]) ->
+    (Quantity * product:get_price(Product)) + sum_cart(Tail).
 
 %%====================================================================
 %% Template Functions
@@ -68,71 +128,8 @@ updateLink() ->
     #link{text="update", actions=Delegate}.
 
 %%====================================================================
-%% External Functions
+%% Nitrogen Events
 %%====================================================================
-add(Quantity, Product) ->
-    Cart = get_cart(),
-    ProdId = product:get_Id(Product),
-    Prods = cc_add(#cartItem{prodId=ProdId,quantity=Quantity},
-		   Cart#cart.products, []),
-    set_cart(Cart#cart{products=Prods}),
-    wf:update(cart_content,list()).
-
-%%====================================================================
-%% Internal Functions
-%%====================================================================
-set_cart(Cart) ->
-    wf:session(cart,Cart),
-    wf:set_cookie(cart,wf:pickle(Cart)),
-    case true of %%Check if user is logged in
-	true ->
-	    []; %%add cart to db
-	_ ->
-	    []
-    end.
-
-get_cart() ->
-    case wf:session(cart) of
-	undefined ->
-	    Cart = case cookie of %%check user logged in
-		       cookie ->
-			   cookie_cart();
-		       db ->
-			   db_cart()
-		   end,
-	    wf:session(cart,Cart),
-	    Cart;
-	Cart ->
-	    Cart
-    end.
-
-cookie_cart() ->
-    case wf:get_cookie(cart) of
-	undefined ->
-	    #cart{products=[]};
-	Cart ->
-	    wf:depickle(Cart)
-    end.
-
-db_cart() ->
-    #cart{products=[]}.
-
-cc_add(Item,[],Acc) ->
-    [Item|lists:reverse(Acc)];
-cc_add(Item,[HD|TL],Acc) ->
-    case Item#cartItem.prodId == HD#cartItem.prodId of
-	true ->
-	    NewQty = Item#cartItem.quantity + HD#cartItem.quantity,
-	    lists:reverse(Acc,[HD#cartItem{quantity=NewQty}|TL]);
-	false ->
-	    cc_add(Item,TL,[HD|Acc])
-    end.
-
-sum_cart([]) ->
-    0;
-sum_cart([{Quantity,Product}|Tail]) ->
-    (Quantity * product:get_price(Product)) + sum_cart(Tail).
-
 event({delete,ProdId}) ->
     Cart = get_cart(),
     Products = [X||X<-Cart#cart.products,X#cartItem.prodId /= ProdId],
