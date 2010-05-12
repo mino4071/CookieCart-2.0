@@ -1,3 +1,4 @@
+%% @hidden
 -module (cookieCart).
 -compile (export_all).
 

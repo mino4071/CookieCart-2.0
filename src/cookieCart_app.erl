@@ -1,3 +1,4 @@
+%% @hidden
 -module (cookieCart_app).
 -include_lib ("nitrogen/include/wf.inc").
 -compile(export_all).

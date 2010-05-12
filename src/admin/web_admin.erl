@@ -1,3 +1,4 @@
+%% @hidden
 -module(web_admin).
 -include_lib("nitrogen/include/wf.inc").
 

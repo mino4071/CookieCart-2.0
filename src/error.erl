@@ -1,3 +1,4 @@
+%% @hidden
 -module (error).
 -compile (export_all).
 

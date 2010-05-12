@@ -5,6 +5,7 @@
 %%%
 %%% Created :  3 May 2010 by  <Mino@X60S>
 %%%-------------------------------------------------------------------
+%% @hidden
 -module (web_admin_productlist).
 -include_lib ("nitrogen/include/wf.inc").
 

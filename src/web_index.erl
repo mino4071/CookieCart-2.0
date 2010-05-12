@@ -5,6 +5,7 @@
 %%%
 %%% Created : 29 Apr 2010 by  <Mino@X60S>
 %%%-------------------------------------------------------------------
+%% @hidden
 -module (web_index).
 -compile (export_all).
 
