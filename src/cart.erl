@@ -21,8 +21,9 @@ add(Quantity, Product) ->
     Prods = cc_add(#cartItem{prodId=ProdId,quantity=Quantity},
 		   Cart#cart.products, []),
     set_cart(Cart#cart{products=Prods}),
-    wf:update(cart_content,list()).
-
+    wf:redirect("").
+    %wf:update(cart_content,list()).
+    %Cookie issues, need to be fixed.
 %%====================================================================
 %% Internal Functions
 %%====================================================================
@@ -37,7 +38,7 @@ set_cart(Cart) ->
     end.
 
 get_cart() ->
-    case true of %%check user logged in
+    case false of %%check user logged in
 	false ->
 	    cookie_cart();
 	true ->
