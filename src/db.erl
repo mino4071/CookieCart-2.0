@@ -55,7 +55,10 @@ start()->
 				   {disc_copies, [node()]}]),
     
     mnesia:create_table(product, [{attributes, record_info(fields, product)},
-				  {disc_copies, [node()]}]).
+				  {disc_copies, [node()]}]),
+    
+    mnesia:create_table(order, [{attributes, record_info(fields, order)},
+				{disc_copies, [node()]}]).
 
 %%--------------------------------------------------------------------
 %% @spec init() -> ok
@@ -185,6 +188,34 @@ get_products(CatId) when is_integer(CatId) ->
     Fun = fun() ->
 		  R = #product{ cat_id = CatId, _ = '_'},
 		  mnesia:select(product, [{R, [], ['$_']}])
+	  end,
+    call(Fun).
+
+%%--------------------------------------------------------------------
+%% Order functions
+%%--------------------------------------------------------------------
+
+%%--------------------------------------------------------------------
+%% @spec add_order(Order) -> ok
+%% @doc Adds an order to the database
+%% @end
+%%--------------------------------------------------------------------
+add_order(Order) ->
+    Id = mnesia:dirty_update_counter(ids,order_id,1),
+    Order1 = Order#order{id = Id},    
+    Fun = fun() ->
+		  mnesia:write(Order1)
+	  end,
+    call(Fun).
+
+%%--------------------------------------------------------------------
+%% @spec get_order(OrderId::orderId()) -> order()
+%% @doc Fetches and returns a order from the database.
+%% @end
+%%--------------------------------------------------------------------
+get_order(OrderId) ->
+    Fun = fun() ->
+		  hd(mnesia:read(order,OrderId))
 	  end,
     call(Fun).
 

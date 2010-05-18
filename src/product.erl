@@ -11,20 +11,19 @@
 %%-API-----------------------------------------------------------------
 -export([load/1,
 	 load/0,
-	 raw_price/0,
 	 get_Id/1,
-	 get_price/1]).
+	 get_Id/0,
+	 get_price/1,
+	 get_quantity/0]).
 
 %%-Template------------------------------------------------------------
 -export([loadFromPath/0,
-	 id/0,
 	 name/0,
 	 url/0,
 	 img/0,
 	 description/0,
 	 price/0,
 	 buyLink/0,
-	 quantity/0,
 	 quantityTextbox/1]).
 
 -include_lib ("nitrogen/include/wf.inc").
@@ -39,6 +38,9 @@
 %%	                      img=string(), price=integer(),
 %%	                      quantity=integer(), 
 %%                            description=string()}
+
+
+
 
 %%====================================================================
 %% API Functions
@@ -74,7 +76,7 @@ load() ->
 %%--------------------------------------------------------------------
 %% @private
 %% @spec get_Id(Product::product()) -> integer()
-%% @doc return the id of the currently loaded product.
+%% @doc return the id of Product.
 %% @end
 %%-------------------------------------------------------------------
 get_Id(Product) ->
@@ -82,12 +84,40 @@ get_Id(Product) ->
 
 %%--------------------------------------------------------------------
 %% @private
+%% @spec get_Id() -> integer()
+%% @doc return the id of the currently loaded product.
+%% @end
+%%-------------------------------------------------------------------
+get_Id() ->
+    (?PRODUCT)#product.id.
+
+%%--------------------------------------------------------------------
+%% @private
 %% @spec get_price(product()) -> integer()
-%% @doc returns the unformatted price of the currently loaded product.
+%% @doc returns the unformatted price of Product.
 %% @end
 %%-------------------------------------------------------------------
 get_price(Product) ->
     Product#product.price.
+
+%%--------------------------------------------------------------------
+%% @private
+%% @spec get_qyantity() -> integer()
+%% @doc returns the unformatted price of the currently loaded product.
+%% @end
+%%-------------------------------------------------------------------
+get_price() ->
+    (?PRODUCT)#product.price.
+
+%%--------------------------------------------------------------------
+%% @private
+%% @spec get_qyantity() -> integer()
+%% @doc returns the quantity of the currently loaded product.
+%% @end
+%%-------------------------------------------------------------------
+get_quantity() ->
+    (?PRODUCT)#product.quantity.
+
 
 %%====================================================================
 %% Template Functions
@@ -160,7 +190,7 @@ buyLink() ->
 %% @end
 %%--------------------------------------------------------------------
 quantityTextbox(Class) ->
-    #textbox{id="Qty" ++ ?i2l(id()),
+    #textbox{id="Qty" ++ ?i2l((?PRODUCT)#product.id),
 	     class=Class, 
 	     text=(?PRODUCT)#product.quantity}.
 

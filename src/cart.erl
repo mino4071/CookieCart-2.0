@@ -24,6 +24,14 @@ add(Quantity, Product) ->
     wf:redirect("").
     %wf:update(cart_content,list()).
     %Cookie issues, need to be fixed.
+
+clear() ->
+    cc_clear().
+
+get_products(Cart) ->
+    CartItemList = Cart#cart.products,
+    db:get_products(CartItemList).
+
 %%====================================================================
 %% Internal Functions
 %%====================================================================
@@ -68,6 +76,9 @@ cc_add(Item,[HD|TL],Acc) ->
 	    cc_add(Item,TL,[HD|Acc])
     end.
 
+cc_clear() ->
+    wf:set_cookie(cart,undefined).
+
 
 sum_cart([]) ->
     0;
@@ -106,11 +117,11 @@ quantityTextbox() ->
     quantityTextbox("").
 quantityTextbox(Class) ->
     #textbox{class=Class, 
-	     id="Qty"++?i2l(product:id()),
-	     text=?i2l(product:quantity())}.
+	     id="Qty"++?i2l(product:get_Id()),
+	     text=?i2l(product:get_quantity())}.
 
 rowTotal() ->
-    price:toString(product:quantity() * product:raw_price()).
+    price:toString(product:get_quantity() * product:get_price()).
 
 totalPrice() ->
     Cart = get_cart(),
@@ -120,13 +131,18 @@ totalPrice() ->
 
 deleteLink() ->
     Delegate = #event{type=click, delegate=cart, 
-		      postback={delete,product:id()}},
+		      postback={delete,product:get_Id()}},
     #link{text="delete", actions=Delegate}.
 
 updateLink() ->
     Delegate = #event{type=click, delegate=cart, 
-		      postback={update,product:id()}},
+		      postback={update,product:get_Id()}},
     #link{text="update", actions=Delegate}.
+
+checkoutLink() ->
+    Delegate = #event{type=click, delegate=cart, 
+		      postback=checkout},
+    #link{text="checkout", actions=Delegate}.
 
 %%====================================================================
 %% Nitrogen Events
@@ -150,6 +166,9 @@ event({update,ProdId}) ->
 	     end,
     Products = [Update(X)||X<-Cart#cart.products],
     set_cart(Cart#cart{products=Products}),
+    wf:redirect("");
+event(checkout) ->
+    order:add(get_cart()),
+    clear(),
     wf:redirect("").
-    
     

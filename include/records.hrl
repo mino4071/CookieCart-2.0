@@ -32,3 +32,11 @@
 -record(cartItem,
 	{prodId,
 	 quantity}).
+
+-record(order,
+	{id,
+	 products}).
+
+-record(orderItem,
+	{product,
+	 quantity}).
